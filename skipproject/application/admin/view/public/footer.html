@@ -1,0 +1,155 @@
+  <!--   <div class="wb-panel-fold">消息提醒</div>
+    <div class="wb-panel">
+      <div class="panel-group" id="panel-accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading" data-tatus='false'>
+            <h4 class="panel-title">
+              <i class="icow icow-dingdan"></i>
+              <a class="news">订单消息</a>
+              <span></span>
+            </h4>
+          </div>
+          <div class="panel-collapse collapse">
+            <ul class="panel-body">
+              <li class="panel-list">
+                <div class="panel-list-text text-center">暂无消息提醒</div></li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" data-tatus='false'>
+            <h4 class="panel-title">
+              <i class="icow icow-gonggao"></i>
+              <a>内部公告</a>
+              <span></span>
+            </h4>
+          </div>
+          <div class="panel-collapse collapse">
+            <ul class="panel-body">
+              <li class="panel-list small">
+                <div class="panel-list-text text-center">暂无消息提醒</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+</body>
+<script>
+function getMenuText(){
+  $('.page-header .text-primary').text($('.single li.active a').text());
+}
+function changeParentUrl(){
+  window.location.href='/admin.php';
+}
+$(function(){
+    var a,b,c,d,e;a=b=c=d=e=true;
+    $("body").bind("keydown",function(event){
+         if (event.keyCode == 116) {
+             //阻止默认刷新
+            var frame = $("#workspace").attr("src");
+            if(frame!=''){
+              event.preventDefault();
+              $("#workspace").attr("src",'');
+              $("#workspace").attr("src", frame);
+            }return false;
+        }
+    })
+
+    //栏目控制
+    $('.wb-nav ul li a').click(function(){
+      $('.wb-nav ul li').removeClass('active');
+      $(this).parent().addClass('active');
+      $('.subnav-scene').text($(this).find('span').text());
+      if (c) {
+        $('.wb-subnav').show().find('.wb-subnav-fold').click();
+      }
+      var data = $(this).attr('data');
+      $('.wb-subnav .single').hide();
+      $('.wb-subnav .single[data-mud=' + data + ']').show().find('li').eq(0).click();
+      getMenuText();
+    })
+    $('.wb-subnav .wb-subnav-fold').click(function(){
+        if (!c) {
+            $(this).parent().parent().addClass('fold');c=!c;
+        }else{
+            $(this).parent().parent().removeClass('fold');c=!c;
+        }return false;
+    })
+    $('.wb-subnav .single li').click(function(){
+      $('.wb-subnav .single li').removeClass('active');
+      $('#workspace').attr('src',$(this).addClass('active').find('a').data('href'));
+      getMenuText();
+    })
+    
+
+    $('.wb-panel div.panel-heading').click(function(){
+        $('.wb-panel .in').removeClass('in');var st = $(this).data("tatus");
+        $('.wb-panel div.panel-heading').data('tatus',false);
+        if (st) {
+            $(this).next('.collapse').removeClass('in');
+            $(this).data('tatus',false);
+        }else{
+            $(this).next('.collapse').addClass('in');
+            $(this).data('tatus',true);
+        }
+        return ;
+    })
+
+    $('.wb-nav-fold .icow-zhedie').click(function(){
+        if(a){
+            $(".wb-header .logo").addClass('small');a=!a;
+            $('.wb-nav').addClass('fold');
+        }else{
+            $(".wb-header .logo").removeClass('small');a=!a;
+            $('.wb-nav').removeClass('fold');
+        }return ;
+    })
+    $('#showmenu').click(function(){
+        event.stopPropagation();
+        if(b){
+            $('.wb-shortcut').addClass('active');b=!b;
+            $('.fast-nav').addClass('in');
+        }else{
+            $('.wb-shortcut').removeClass('active');b=!b;
+            $('.fast-nav').removeClass('in');
+        }return ;
+    })
+    $('.fast-nav .menu a').hover(function(){
+        var data = $(this).data('tab');
+        $('.fast-nav .menu a').removeClass('active');
+        $(this).addClass('active');
+        $('.fast-nav .list .list-inner').removeClass('in');
+        $('.fast-nav .list .list-inner[data-tab=' + data + ']').addClass('in');
+    },function(){return false;})
+
+    $('body').click(function(){
+        $('.wb-shortcut').removeClass('active');b=!b;
+        $('.fast-nav').removeClass('in');
+    })
+    $('.fast-nav').click(function(){event.stopPropagation();return false;})
+
+    $('.wb-subnav .menu-header').click(function(){
+        if (d) {
+            $(this).addClass('active').next().show();d=!d;
+            $(this).find('img').attr('src','__PUBLIC__/img/a.png');
+        }else{
+            $(this).removeClass('active').next().hide();d=!d;
+            $(this).find('img').attr('src','__PUBLIC__/img/b.png');
+        }return ;
+    })
+
+    $('.wb-panel-fold').click(function(){
+        if (!e) {
+            $(this).removeClass('in');$('.wb-panel').removeClass('in');
+            $('.wb-container').addClass('right-panel');
+            $('.wb-panel-fold').html('消息提醒');e=!e;
+        }else{
+            $(this).addClass('in');$('.wb-panel').addClass('in');
+            $('.wb-container').removeClass('right-panel');
+            $('.wb-panel-fold').html('》&nbsp;收起面板');e=!e;
+        }return ;
+    })
+})
+</script>
+</html>

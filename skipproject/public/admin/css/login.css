@@ -1,0 +1,95 @@
+body,
+html
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: Microsoft YaHei;
+    font-size: 13px;
+    line-height: 1.4em;
+    min-width: 0;
+    color: #444;
+    background: #1b1b29;
+}
+
+.login {
+
+}
+.login .wrapper {
+    width: 400px;
+    height: 500px;
+    margin: -200px -200px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+.login .wrapper h1 > a {
+    display: block;
+    font-weight: 300;
+    font-size: 48px;
+    text-align: center;
+    padding: 2px 0;
+    text-decoration: none;
+}
+.login .wrapper h1 > a img {
+    margin-right: 10px;
+    margin-top: -8px;
+}
+.login .wrapper .login-body {
+    margin-top: 20px;
+    background: #fff;
+}
+
+.login .wrapper .login-body form {
+    padding: 0 30px;
+}
+
+.login .wrapper .login-body h2 {
+    font-weight: 300;
+    color: #333;
+    font-size: 24px;
+    padding: 30px 30px 15px 30px;
+}
+
+.login .wrapper .login-body .email input, .login .wrapper .login-body .pw input {
+    padding: 8px 12px;
+    height: 35px;
+}
+.login .wrapper .login-body .submit {
+    margin-top: 15px;
+    *zoom: 1;
+}
+.login .wrapper .login-body .submit .remember {
+    float: left;
+    margin-top: 5px;
+    margin-left: 1px;
+}
+.login .wrapper .login-body .submit input {
+    float: right;
+    background: #155abb;
+    padding: 5px 18px;
+}
+
+.login .wrapper .login-body .forget {
+    margin-top: 50px;
+}
+.login .wrapper .login-body .forget a {
+    background: #eee;
+    padding: 10px 0;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    color: #555;
+}
+.login .wrapper .login-body .forget a span {
+    line-height: 30px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.login label{
+    color: #8a8a8a;
+    font-weight: inherit;
+}

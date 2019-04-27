@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2f73e202-fa2e-430a-a4d9-cde7088c6762" name="112.124.34.189" url="http://112.124.34.189">
+        <fileTransfer host="112.124.34.189" port="22" rootFolder="/www/web/weixin_mudaxi_com/public_html" accessType="SFTP" password="dfcedf99dfd0dfe6dfccdfeedffadffc" username="root">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,162 @@
+<style type="text/css">
+   .green{
+       background: #1ab192!important;
+       color:#fff!important;
+   }
+</style>
+<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+    <table>
+        <tbody>
+        <volist name="jumpUrl" id="list">
+            <tr data-id="{$list['id']}">
+                <td class="sign">
+                    <div style="width: 24px;"><i class="ico-check"></i></div>
+                </td>
+
+                <td align="left" class="">
+                    <div style="text-align: center; width: 40px;">{$list.id|default=""}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 80px;">{$project[$list.pid]}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 250px;">{$list.url}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 60px;">
+                        <if condition="($list['status'] eq 1)">
+                            <span style="color: green;">正常</span>
+                        <elseif condition="$list['status'] eq 2"/> 
+                            <span style="color: #f30304;">被封</span>
+                        </if>
+                    </div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list.mark|default=""}</div>
+                </td>
+             
+                <td align="center" class="handle">
+                    <div style="text-align: center; width: 260px; ">
+                        <a class="btn blue changestauts" data-id="{$list['id']}" data-href="{:url('/Project/edit_jump_isuse')}">
+                            <if condition="($list['isuse'] eq 1)">
+                            设为禁用
+                            <else/>
+                            设为启用
+                            </if>
+                        </a>
+                        <a class="btn changeDefault {$list['isdefault']==1?'green':'blue'}" href="javascript:;" data-id="{$list['id']}" data-href="{:url('/Project/edit_jump_isdefault')}">
+                            <if condition="($list['isdefault'] eq 1)">
+                            默认
+                            <else/>
+                            设为默认
+                            </if>
+                        </a>
+                       
+                        <a class="btn red" href="javascript:;" data-toggle="tooltip" onclick="delfun(this)" data-url="{:url('Project/del_jump_url')}" data-id="{$list.id}"><i class="fa fa-list-alt"></i>删除</a>
+                    </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                    <div>&nbsp;</div>
+                </td>
+            </tr>
+        </volist>
+        </tbody>
+    </table>
+</div>
+<!--分页位置-->
+{$pager->show()}
+<script>
+    $(".pagination  a").click(function(){
+        var page = $(this).data('p');
+        ajax_get_table('search-form2',page);
+    });
+    $(".changestauts").click(function(){
+        var obj=$(this);
+         // 删除按钮
+        layer.confirm('确认启用状态吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: obj.attr('data-href'),
+                data: {id : obj.attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        //状态为启用
+                        if(data.isuse==1){
+                            obj.html('设为禁用');
+                        }else{
+                            obj.html('设为启用');
+                        }
+                    } else {
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }, function () {
+        });
+    });
+
+    $(".changeDefault").click(function(){
+        var obj=$(this);
+         // 删除按钮
+        layer.confirm('确认修改默认状态吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: obj.attr('data-href'),
+                data: {id : obj.attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        //状态为启用
+                        if(data.isdefault==1){
+                            obj.html('默认');
+                        }else{
+                            obj.html('设为默认');
+                        }
+                    } else {
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }, function () {
+        });
+    });
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid >table>tbody>tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+        $('#user_count').empty().html("{$pager->totalRows}");
+    });
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {id : $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }, function () {
+        });
+    }
+</script>

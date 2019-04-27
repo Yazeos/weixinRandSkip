@@ -1,0 +1,491 @@
+<include file="public/layout" />
+<style type="text/css">
+    .project .row .tit{
+       width:10%;
+    }
+    .project .row .opt{
+        width:21%;
+    }
+    .flexigrid .bDiv{
+       min-height:0px;
+    }
+</style>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>项目管理</h3>
+            </div>
+        </div>
+    </div>
+
+    <form class="form-horizontal" action="" id="myform" method="post" enctype="multipart/form-data">
+        <div class="ncap-form-default project">
+            <input type="hidden" name="id" value="{$project.id}">
+            <dl class="row">
+                <dt class="tit">
+                    <label>修改项目名称</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="title" id="title" value="{$project.title}" class="input-txt" style="width:120px!important;">
+                </dd>
+                <dt class="tit">
+                    <label>跳转方式：</label>
+                </dt>
+                <dd class="opt">
+                    <select name="jumptype" title="请选择跳转方式" id="jumptype">
+                        <option value="1" {$project['jumptype']=='1'?'selected':''}>顺序跳转</option>
+                        <option value="2" {$project['jumptype']=='2'?'selected':''}>随机跳转</option>
+                        <option value="3" {$project['jumptype']=='3'?'selected':''}>直接跳转</option>
+                        <option value="4" {$project['jumptype']=='4'?'selected':''}>随机直接跳转</option>
+                    </select>
+                </dd>
+                <dd class="opt">
+                    <div class="bott"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">提交修改</a></div>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dd class="opt" style="width:100%">
+                    选择一个接入的域名，设置入口（推广）网址，添加跳出网址，复制生成的推广链接放在场景返回链接，公众号自动回复，阅读原文等处！推广链接的被封几率非常低！用户点击入口网址进入默认出口，用户按返回跳转到下一个出口链接
+                </dd>
+            </dl>
+            
+        </div>
+    </form>
+
+    <!-- 入口网址s -->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>推广网址列表</h3>
+                <h5>(共<span id="user_count"></span>条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+        </div>
+
+    
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign" axis="col0">
+                            <div style="width: 24px;"><i class="ico-check"></i></div>
+                        </th>
+                        <th align="center" abbr="id" axis="col3" class="">
+                            <div style="text-align: center; width: 40px;" class="">ID</div>
+                        </th>
+                        <th align="center" axis="col4" class="">
+                            <div style="text-align: center; width: 60px;" class="">所属项目</div>
+                        </th>
+                          <th align="center" abbr="url" axis="col6" class="">
+                            <div style="text-align: center; width: 250px;" class="">入口域名</div>
+                        </th>
+                        <th align="center" abbr="status" axis="col5" class="">
+                            <div style="text-align: center; width: 100px;" class="">被封状态</div>
+                        </th>
+                        <th align="center" abbr="mark" axis="col5" class="">
+                            <div style="text-align: center; width: 150px;" class="">备注</div>
+                        </th>
+                        <th align="center" abbr="hit" axis="col5" class="">
+                            <div style="text-align: center; width: 60px;" class="">点击量</div>
+                        </th>
+                        <th align="center" axis="col1" class="handle">
+                            <div style="text-align: center; width: 80px;">操作</div>
+                        </th>
+
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="bDiv" style="height: auto;" id="ajax_return">
+        </div>
+
+        <form class="form-horizontal" action="" id="myform2" method="post" enctype="multipart/form-data">
+            <div class="ncap-form-default project">
+                <input type="hidden" name="pid" value="{$id}">
+                <dl class="row">
+                    <dt class="tit">
+                        <label>设置入口（推广）网址：</label>
+                    </dt>
+                    <dd class="opt">
+                        <select name="url" title="请选择域名" id="url">
+                            <volist name="urlList" id="list" key="k">
+                               <option value="{$list.url}" {$k==0?'selected':''}>{$list.url}</option>
+                            </volist>
+                        </select>
+                    </dd>
+                 <!--    <dt class="tit">
+                        <label>备注：</label>
+                    </dt> -->
+                    <dd class="opt">
+                        <input type="text" name="mark" placeholder="备注,可以留空">
+                    </dd>
+                    <dd class="opt">
+                        <div class="bott"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">设置</a></div>
+                    </dd>
+                </dl>
+              
+            </div>
+        </form>
+    </div>
+    <!-- 入口网址e -->
+
+    <!-- 跳转网址s -->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>跳转网址列表</h3>
+                <h5>(共<span id="user_count2"></span>条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+        </div>
+
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign" axis="col0">
+                            <div style="width: 24px;"><i class="ico-check"></i></div>
+                        </th>
+                        <th align="center" abbr="id" axis="col3" class="">
+                            <div style="text-align: center; width: 40px;" class="">ID</div>
+                        </th>
+                        <th align="center" axis="col4" class="">
+                            <div style="text-align: center; width: 80px;" class="">所属项目</div>
+                        </th>
+                          <th align="center" abbr="url" axis="col6" class="">
+                            <div style="text-align: center; width: 250px;" class="">跳转地址</div>
+                        </th>
+                        <th align="center" abbr="status" axis="col5" class="">
+                            <div style="text-align: center; width: 60px;" class="">被封状态</div>
+                        </th>
+
+                        <th align="center" abbr="mark" axis="col5" class="">
+                            <div style="text-align: center; width: 150px;" class="">备注</div>
+                        </th>
+
+                        <th align="center" axis="col1" class="handle">
+                            <div style="text-align: center; width: 80px;">操作</div>
+                        </th>
+
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="bDiv" style="height: auto;" id="ajax_return2">
+        </div>
+
+        <form class="form-horizontal" action="" id="myform3" method="post" enctype="multipart/form-data">
+            <div class="ncap-form-default project">
+                <input type="hidden" name="pid" value="{$id}">
+                <dl class="row">
+                   <dt class="tit">
+                       <label>添加跳出网址</label>
+                   </dt>
+                   <dd class="opt">
+                       <input type="text" name="url" placeholder="需自带http://">
+                   </dd>
+
+                   <!-- <dt class="tit">
+                       <label>填写备注：</label>
+                   </dt> -->
+                   <dd class="opt">
+                       <input type="text" name="mark" placeholder="备注/原始id，可以留空">
+                   </dd>
+
+                   <dd class="opt">
+                      <div class="bott"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">添加</a></div>
+                   </dd>
+                </dl>
+                <dl class="row">
+                    <dd class="opt" style="width:100%">
+                        当跳出网址为公众号历史消息链接，备注为公众号原始ID时，为一键关注功能
+                    </dd>
+                </dl>
+            </div>
+        </form>
+    </div>
+    <!-- 跳转网址e -->
+
+
+    <!-- 限制地区ip -->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>添加地区访问ip限制</h3>
+                <h5>(共<span id="user_count3"></span>条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+        </div>
+
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign" axis="col0">
+                            <div style="width: 24px;"><i class="ico-check"></i></div>
+                        </th>
+                        <th align="center" abbr="id" axis="col3" class="">
+                            <div style="text-align: center; width: 40px;" class="">ID</div>
+                        </th>
+                        <th align="center" axis="col4" class="">
+                            <div style="text-align: center; width: 80px;" class="">所属省份</div>
+                        </th>
+                        <th align="center" abbr="url" axis="col6" class="">
+                            <div style="text-align: center; width: 250px;" class="">城市</div>
+                        </th>
+
+                        <th align="center" axis="col1" class="handle">
+                            <div style="text-align: center; width: 80px;">操作</div>
+                        </th>
+
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="bDiv" style="height: auto;" id="ajax_return3">
+        </div>
+
+        <form class="form-horizontal" action="" id="myform4" method="post" enctype="multipart/form-data">
+            <div class="ncap-form-default project">
+                <input type="hidden" name="pid" value="{$id}">
+                <input type="hidden" id="province_name" name="province_name" value="">
+                <dl class="row">
+                    <dt class="tit">
+                        <label>省份</label>
+                    </dt>
+                    <dd class="opt">
+                        <select name="province" id="province">
+                            <option value="">--请选择--</option>
+
+                            <volist name="province" id="pro">
+                                <option value="{$pro['pid']}">{$pro['Provincial']}</option>
+                            </volist>
+                        </select>
+                    </dd>
+
+                    <dt class="tit">
+                        <label>城市</label>
+                    </dt>
+                    <dd class="opt">
+                        <select name="city" id="city">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </dd>
+
+                    <!-- <dt class="tit">
+                        <label>填写备注：</label>
+                    </dt> -->
+                    <!--<dd class="opt">-->
+                        <!--<input type="text" name="mark" placeholder="备注/原始id，可以留空">-->
+                    <!--</dd>-->
+
+                    <dd class="opt">
+                        <div class="bott"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">添加</a></div>
+                    </dd>
+                </dl>
+                <!--<dl class="row">-->
+                    <!--<dd class="opt" style="width:100%">-->
+                        <!--当跳出网址为公众号历史消息链接，备注为公众号原始ID时，为一键关注功能-->
+                    <!--</dd>-->
+                <!--</dl>-->
+            </div>
+        </form>
+    </div>
+    <!-- 限制地区ip -->
+
+
+</div>
+<script>
+    $(document).ready(function(){
+        ajax_get_table('search-form2',1);
+        ajax_get_table2('search-form2',1);
+        ajax_get_table3('search-form2',1);
+    });
+
+    $('#myform .bott a').click(function(){
+        var title=$("input[name='title']").val();
+        if(title==''){
+            alert("项目名称不能为空");
+        }else{
+            var form = $('#myform')[0];
+            var fd = new FormData(form);
+            $.ajax({
+               url:'{:url("Project/edit_project")}',
+               type:'POST',
+               async: false,
+               cache: false,
+               contentType: false,
+               processData: false,
+               data:fd,
+               dataType:'json',
+               success:function(z){
+                   console.log(z);
+                    //return false;
+                   if(z==1){
+                       alert('修改成功');
+                       window.location.href=location.href;
+                   }else if(z==-1){
+                       alert('该项目名称已存在');
+                   }else{
+                       alert("网络繁忙，请稍后再试");
+                   };
+               }
+            }); 
+        }
+    });
+
+    //添加入口地址
+    $('#myform2 .bott a').click(function(){
+        var form = $('#myform2')[0];
+        var fd = new FormData(form);
+        $.ajax({
+           url:'{:url("Project/add_portal")}',
+           type:'POST',
+           async: false,
+           cache: false,
+           contentType: false,
+           processData: false,
+           data:fd,
+           dataType:'json',
+           success:function(z){
+                alert(z.msg);
+                ajax_get_table('search-form2',1);
+           }
+        }); 
+    });
+
+    //添加跳出网址
+    $('#myform3 .bott a').click(function(){
+        var form = $('#myform3')[0];
+        var fd = new FormData(form);
+        $.ajax({
+           url:'{:url("Project/add_jump")}',
+           type:'POST',
+           async: false,
+           cache: false,
+           contentType: false,
+           processData: false,
+           data:fd,
+           dataType:'json',
+           success:function(z){
+                alert(z.msg);
+                ajax_get_table2('search-form2',1);
+           }
+        }); 
+    });
+
+    //添加地区ip限制
+    $('#myform4 .bott a').click(function(){
+        var form = $('#myform4')[0];
+        var fd = new FormData(form);
+        $.ajax({
+           url:'{:url("Project/add_iprestrict")}',
+           type:'POST',
+           async: false,
+           cache: false,
+           contentType: false,
+           processData: false,
+           data:fd,
+           dataType:'json',
+           success:function(z){
+                alert(z.msg);
+                ajax_get_table3('search-form2',1);
+           }
+        });
+    });
+
+    $('#province').change(function(){
+        $.ajax({
+            url:'{:url("Project/getCity")}',
+            type:'POST',
+            async: true,
+//            cache: false,
+//            contentType: false,
+//            processData: false,
+            data:{
+                'pid' :$(this).val()
+            },
+            dataType:'json',
+            success:function(z){
+                console.log(z);
+                html='';
+                for(i in z){
+                    html+='<option value="'+z[i]['city']+'">'+z[i]['city']+'</option>';
+                }
+                $('#city').html(html);
+
+            }
+        });
+
+        $('#province_name').val($(this).find("option:selected").text());
+    })
+
+    // ajax 抓取入口网址列表
+    function ajax_get_table(tab,page){
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/admin.php/project/index_ajax2/p/"+page+"/id/"+{$id},//+tab,
+            data : $('#'+tab).serialize(),// 你的formid
+            success: function(data){
+                $("#ajax_return").html('');
+                $("#ajax_return").append(data);
+            }
+        });
+    }
+
+    // ajax 抓取跳转网址列表
+    function ajax_get_table2(tab,page){
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/admin.php/project/index_ajax3/p/"+page+"/id/"+{$id},
+            data : $('#'+tab).serialize(),// 你的formid
+            success: function(data){
+                $("#ajax_return2").html('');
+                $("#ajax_return2").append(data);
+            }
+        });
+    }
+
+    // ajax 抓取跳转网址列表
+    function ajax_get_table3(tab,page){
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/admin.php/project/index_ajax4/p/"+page+"/id/"+{$id},
+            data : $('#'+tab).serialize(),// 你的formid
+            success: function(data){
+                $("#ajax_return3").html('');
+                $("#ajax_return3").append(data);
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+    <table>
+        <tbody>
+        <volist name="advertisement" id="list">
+            <tr data-id="{$list['id']}">
+                <td class="sign">
+                    <div style="width: 24px;"><i class="ico-check"></i></div>
+                </td>
+
+                <td align="left" class="">
+                    <div style="text-align: center; width: 40px;">{$list.id|default=""}</div>
+                </td>
+                  <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">
+                        <a class="btn blue" href="{:url('/Project/detail',array('id'=>$list['id']))}">
+                            {$list.title|default=""}
+                        </a>
+                    </div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list.createtime|date='Y-m-d H:i:s',###}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$defaulturl[$list.id]|default=''}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 100px;">
+                        <if condition="($list['jumptype'] eq 1)">
+                            <span>顺序跳转</span>
+                        <elseif condition="$list['jumptype'] eq 2"/> 
+                            <span>随机跳转</span>
+                        <elseif condition="$list['jumptype'] eq 3"/> 
+                            <span>直接跳转</span>
+                        <elseif condition="$list['jumptype'] eq 4"/> 
+                            <span>随机直接跳转</span>
+                        </if>
+                    </div>
+                </td>
+                <td align="center" class="handle">
+                    <div style="text-align: center; width: 40px; max-width:250px;">
+                       <!--  <a class="btn blue" href="{:url('/Project/edit_project',array('id'=>$list['id']))}"><i class="fa fa-pencil-square-o"></i>修改</a> -->
+                        <a class="btn red" href="javascript:;" data-toggle="tooltip" onclick="delfun(this)" data-url="{:url('Project/del')}" data-id="{$list.id}"><i class="fa fa-list-alt"></i>删除</a>
+                    </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                    <div>&nbsp;</div>
+                </td>
+            </tr>
+        </volist>
+        </tbody>
+    </table>
+</div>
+<!--分页位置-->
+{$pager->show()}
+<script>
+    $(".pagination  a").click(function(){
+        var page = $(this).data('p');
+        ajax_get_table('search-form2',page);
+    });
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid >table>tbody>tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+        $('#user_count').empty().html("{$pager->totalRows}");
+    });
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('删除该项目的同时将删除其下的所有推广网址和跳转网址，确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {id : $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }, function () {
+        });
+    }
+</script>

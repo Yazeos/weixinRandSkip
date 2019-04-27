@@ -1,0 +1,153 @@
+<include file="public/layout" />
+<style>
+    td{height:40px;line-height:40px; padding-left:20px;}
+    .span_1{
+        float:left;
+        margin-left:0px;
+        height:130px;
+        line-height:130px;
+    }
+    .span_1 ul{list-style:none;padding:0px;}
+    .span_1 ul li{
+        border:1px solid #CCC;
+        height:40px;
+        padding:0px 10px;
+        margin-left:-1px;
+        margin-top:-1px;
+        line-height:40px;
+    }
+    .img{
+        display:block;
+        width:20vh;
+        height:20vh;
+        border:1px solid #999;
+    }
+    .upload{
+        display:block;
+        width:25vw;
+        height:20vh;
+        margin-bottom:-20vh;
+        opacity:0;
+    }
+    .video{
+        display:block;
+        width:25vw;
+        height:30vh;
+        border:1px solid #999;
+    }
+    .video source{
+        width: 25vw;
+        height: 30vh;
+    }
+    .video_upload{
+        display:block;
+        width:25vw;
+        height:30vh;
+        background-color: red;
+        margin-bottom:-30vh;
+        opacity:0;
+    }
+    .video_tip{
+        display: inline-block;
+        width: 25vw;
+        height: 4vh;
+        font-size: 12px;
+        line-height: 4vh;
+        color: #bbb;
+        position: relative;
+        text-align: left;
+    }
+    .video_tip:hover{
+        color:#71d2c1;
+    }
+    .textarea{
+        width: 30vw;
+        height: 25vh;
+        border:1px solid #ccc;
+    }
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>项目管理 - 添加项目</h3>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" action="" id="myform" method="post" enctype="multipart/form-data">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label>项目名称：</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="title" id="title" value="" class="input-txt">
+                    <span class="err"></span>
+                    <p class="notic">所需要添加的项目名称</p></dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>跳转方式：</label>
+                </dt>
+                <dd class="opt">
+                    <select name="jumptype" title="请选择跳转方式" id="jumptype">
+                        <option value="1" selected>顺序跳转</option>
+                        <option value="2" >随机跳转</option>
+                        <option value="3">直接跳转</option>
+                        <option value="4">随机直接跳转</option>
+                    </select>
+                </dd>
+            </dl>
+            
+            <div class="content"></div>
+            <div class="bot"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">确认提交</a></div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    //提交判断是否为空
+    $('#myform .bot a').click(function(){
+        var title=$("input[name='title']").val();
+        if(title==''){
+            alert("项目名称不能为空");
+        }else{
+            var form = $('#myform')[0];
+            var fd = new FormData(form);
+            $.ajax({
+               url:'{:url("Project/add_project")}',
+               type:'POST',
+               async: false,
+               cache: false,
+               contentType: false,
+               processData: false,
+               data:fd,
+               dataType:'json',
+               success:function(z){
+                   console.log(z);
+                    //return false;
+                   if(z==1){
+                       alert('添加成功');
+                       window.location.href="{:url('Project/plist')}";
+                   }else if(z==-1){
+                       alert('该项目名称已存在');
+                   }else{
+                       alert("网络繁忙，请稍后再试");
+                   };
+               }
+            }); 
+        }
+    });
+
+    //当点击span的时候联动点击video_upload
+    $('.content').on('click','.video_tip',function(){
+        $(this).parent().children('.video_upload').click();
+    });
+</script>
+
+</body>
+</html>

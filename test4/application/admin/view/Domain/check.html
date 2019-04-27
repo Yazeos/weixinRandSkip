@@ -1,0 +1,139 @@
+<include file="public/layout" />
+<style>
+    td{height:40px;line-height:40px; padding-left:20px;}
+    .span_1{
+        float:left;
+        margin-left:0px;
+        height:130px;
+        line-height:130px;
+    }
+    .span_1 ul{list-style:none;padding:0px;}
+    .span_1 ul li{
+        border:1px solid #CCC;
+        height:40px;
+        padding:0px 10px;
+        margin-left:-1px;
+        margin-top:-1px;
+        line-height:40px;
+    }
+    .img{
+        display:block;
+        width:20vh;
+        height:20vh;
+        border:1px solid #999;
+    }
+    .upload{
+        display:block;
+        width:25vw;
+        height:20vh;
+        margin-bottom:-20vh;
+        opacity:0;
+    }
+    .video{
+        display:block;
+        width:25vw;
+        height:30vh;
+        border:1px solid #999;
+    }
+    .video source{
+        width: 25vw;
+        height: 30vh;
+    }
+    .video_upload{
+        display:block;
+        width:25vw;
+        height:30vh;
+        background-color: red;
+        margin-bottom:-30vh;
+        opacity:0;
+    }
+    .video_tip{
+        display: inline-block;
+        width: 25vw;
+        height: 4vh;
+        font-size: 12px;
+        line-height: 4vh;
+        color: #bbb;
+        position: relative;
+        text-align: left;
+    }
+    .video_tip:hover{
+        color:#71d2c1;
+    }
+    .textarea{
+        width: 30vw;
+        height: 25vh;
+        border:1px solid #ccc;
+    }
+    #flexigrid{
+        margin-left:16%;
+    }
+    #flexigrid tr td{
+        border:1px solid #ccc;
+    }
+
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>域名管理 - 域名检测</h3>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" action="" id="myform" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$url.id}">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label>域名名称：</label>
+                </dt>
+                <dd class="opt">
+                    <textarea name="checkurl" cols="50" style="height:200px;"></textarea>
+                    <span class="err"></span>
+                    <p class="notic">输入所需要检测的域名，多个域名之间用换行分开</p></dd>
+            </dl>
+            
+            <div class="content"></div>
+            <div class="bot"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green">开始检测</a></div>
+        </div>
+    </form>
+</div>
+<div id="check_res">
+
+</div>
+
+<script type="text/javascript">
+    //提交判断是否为空
+    $('#myform .bot a').click(function(){
+        var title=$("input[name='checkurl']").val();
+        if(title==''){
+            alert("域名不能为空");
+        }else{
+            var form = $('#myform')[0];
+            var fd = new FormData(form);
+            $.ajax({
+               url:'{:url("domain/check_ajax")}',
+               type:'POST',
+               async: false,
+               cache: false,
+               contentType: false,
+               processData: false,
+               data:fd,
+               dataType:'json',
+               success:function(data){
+                   //console.log(z);
+                   $("#check_res").html('');
+                   $("#check_res").append(data);
+               }
+            }); 
+        }
+    });
+</script>
+
+</body>
+</html>

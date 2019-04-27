@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天网云后台管理系统</title>
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/v3.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/common_v3.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/iconfont(1).css">
+    <link href="__PUBLIC__/css/we7.common.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/daterangepicker.css">
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/layer/layer.js"></script>
+  </head>
+  <body>
+    <div class="wb-header" style="position: fixed;">
+      <div class="logo "></div>
+      <ul>
+        <li>
+          <a href="{:url('Index/index')}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="管理首页">
+            <i class="icow icow-homeL"></i>
+          </a>
+        </li>
+      </ul>
+      <div class="wb-topbar-search expand-search">
+        <div class="wb-search-result">
+          <ul></ul>
+        </div>
+      </div>
+      <div class="wb-header-flex"></div>
+      <ul>
+        <li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="系统管理" style="display: none;">
+          <a href="r=system">
+            <i class="icow icow-syssetL"></i>
+          </a>
+        </li>
+        <li class="dropdown  ellipsis">
+          <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{$username}
+            <span></span></a>
+          
+          <ul class="dropdown-menu">
+            <li>
+              <a href="javascript:void(0);" onclick="$('#workspace').attr('src','{:url('Admin/admin_info',array('admin_id'=>$adminUid))}')">修改密码</a></li>
+            
+          </ul>
+        </li>
+        <li data-toggle="tooltip" data-placement="bottom" title="退出登录">
+          <a class="wb-header-logout" href="{:url('Login/logout')}">
+            <i class="icow icow-exit"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- 一级导航 -->
+    <div class="wb-nav ">
+      <p class="wb-nav-fold">
+        <i class="icow icow-zhedie"></i>
+      </p>
+      <ul>
+        <li>
+          <a href="javascript:void(0);" data="project">
+            <i class="icow icow-sysset"></i>
+            <span class="wb-nav-title">项目管理</span></a>
+          <span class="wb-nav-tip">项目管理</span>
+        </li>
+
+        <li>
+          <a href="javascript:void(0);" data="domain">
+            <i class="icow icow-sysset"></i>
+            <span class="wb-nav-title">域名管理</span></a>
+          <span class="wb-nav-tip">域名管理</span>
+        </li>
+
+        <li>
+          <a href="javascript:void(0);" data="emailog">
+            <i class="icow icow-diypage"></i>
+            <span class="wb-nav-title">通知日志</span></a>
+          <span class="wb-nav-tip">通知日志</span>
+        </li>
+
+        <if condition="$role_id eq 1">
+        <li>
+          <a href="javascript:void(0);" data='adminMenber'>
+            <i class="icow icow-member"></i>
+            <span class="wb-nav-title">管理员</span></a>
+          <span class="wb-nav-tip">管理员</span>
+        </li>
+        </if>
+      </ul>
+    </div>
+
+    <!-- 二级导航 -->
+    <div class="wb-subnav fold">
+      <div style="width: 100%;height: 100%;overflow-y: auto">
+        <div class="subnav-scene">loading..</div>
+        
+        <foreach name="$menu" item="vos" key="key" >
+            <ul class="single" data-mud="{$key}" style="display: none;">
+            <foreach name="$vos" item="vo" key="k" >
+            <li style="position: relative">
+              <a href="javascript:void(0);" style="cursor: pointer;" data-href='{:url("$vo[op]/$vo[act]")}' data-route="order.list.status1">{$vo.name}</a>
+            </li>
+            </foreach>
+            </ul>
+        </foreach>
+        <div class="wb-subnav-fold icow"></div>
+      </div>
+    </div>

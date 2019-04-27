@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>上墙广告系统电脑端</title>
+    <link rel="stylesheet" href="__STATIC__/css/common.css">
+    <script type="text/javascript" src="__STATIC__/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=kBQPQqsAxEV9FGBORg4MrQS4KPGyVw02"></script>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script type="text/javascript"
+    src="https://api.map.baidu.com/getscript?v=2.0&ak=kBQPQqsAxEV9FGBORg4MrQS4KPGyVw02"></script>
+    <script type="text/javascript"
+    src="https://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+    <script type="text/javascript"
+    src="https://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+</head>
+	<style type="text/css">
+		.map{
+			width: 800px;
+			height: 600px;
+		}
+	</style>
+<body>
+    <include file="Public:header">
+    <div><h2>查看附近的设备</h2></div>
+    <div class="map" id="BDMap"></div>
+
+    <!-- 百度地图相关配置 -->
+    <script type="text/javascript">
+    	var map = new BMap.Map("BDMap");
+    	//创建地图实例
+    	var point = new BMap.Point(113.241533,23.120447);//默认  `
+    	map.centerAndZoom(point, 9);
+    	//创建地图起始点及控制显示大小
+    	map.enableDragging();//启用地图拖拽，默认启用。
+    	map.enableScrollWheelZoom();//启用滚轮放大缩小，默认禁用。
+    	map.enableDoubleClickZoom();//启用双击放大，默认启用。
+    	map.enableKeyboard();//启用键盘操作，默认禁用。键盘的上、下、左、右键可连续移动地图。同时按下其中两个键可使地图进行对角移动。PgUp、PgDn、Home和End键会使地图平移其1/2的大小。+、-键会使地图放大或缩小一级。
+    	map.enableInertialDragging();
+    	//启用地图惯性拖拽，默认禁用。
+
+    	//百度地图控件
+    	map.addControl(new BMap.NavigationControl());//平移缩放控件
+    	map.addControl(new BMap.ScaleControl());//比例尺 
+    	map.addControl(new BMap.OverviewMapControl());//缩略地图  
+    	map.addControl(new BMap.MapTypeControl()); //地图类型	    
+
+    	//将查询出来的设备信息数组赋值
+    	var shebei={$shebei};
+
+    	//自动定义标注并添加标注函数
+    	function addMarker(point,description){  // 创建图标对象   
+    	    var myIcon = new BMap.Icon("__STATIC__/images/markers.png", new BMap.Size(23, 25), {       
+    	        anchor: new BMap.Size(10, 25), 
+    	    });      
+    	    // 创建标注对象并添加到地图
+    	    var marker= new BMap.Marker(point, {icon: myIcon});    
+    	    map.addOverlay(marker);
+            // 绑定marker移动位置显示坐标监听
+    	    // marker.enableDragging();
+    	    // marker.addEventListener("dragend", function(e){    
+    	    //     alert("当前位置：" + e.point.lng + "," + e.point.lat);    
+    	    // });
+    	    //添加标注的信息弹出窗
+    	    var infoWindow = new BMap.InfoWindow(description);  //弹出窗口
+    	    marker.addEventListener("click", function(){
+    	    	this.openInfoWindow(infoWindow);
+    	    }); 
+    	    //弹出窗绑定打开监听
+    	    infoWindow.addEventListener('open', function(e){	    	
+                // console.log("打开了InfoWindow");
+                //打开监听绑定jq点击事件
+                $("#sub1").bind("click",function(){
+                	var start=$("#start").val();
+                	if (start=='') {
+                		alert('您还没有输入出发位置哟~')
+                	}else{
+                        var end = $('#end').html();
+                        window.open("http://map.baidu.com/?l=&s=nse%26wd%3D"+start+"%26isSingle%3Dtrue%26t%3D0%26name%3D"+end+"%26ptx%3D12623396.14%26pty%3D2637674.17%26poiType%3D0%26en%3D1%24%24%24%2412623396.14%2C2637674.17%24%24"+end+"%24%24%24%24%24%24%26sc%3D257%26ec%3D257"); 
+                	}
+	  	        });
+	  	        $("#sub2").bind("click",function(){
+	  	        	var start=$("#start").val();
+	  	        	if (start=='') {
+                		alert('您还没有输入出发位置哟~')
+                	}else{
+                        var end = $('#end').html();
+                        window.open("http://map.baidu.com/?c=12631273.08,2651772.18&l=&s=bse%26wd%3D"+start+"%26isSingle%3Dtrue%26t%3D0%26name%3D"+end+"%26ptx%3D12631273.08%26pty%3D2651772.18%26poiType%3D0%26en%3D1%24%24%24%2412631273.08%2C2651772.18%24%24"+end+"%24%24%24%24%24%24%26sc%3D7%26ec%3D7%26c%3D7");
+                	}
+	  	        });
+    	    });
+    	    //绑定弹出框
+	 	}
+
+    	//循环数据输出附近设备相关信息
+    	for(var i=0;i<shebei.length;i++){
+    		var point;
+    		var description;
+    		for (var key in shebei[i]) {
+    			if(key=='baidu_coordinate'){
+	    			var address=shebei[i][key];
+		    		// console.log(address);
+		    		var arr=address.split(",");
+		    		var x=arr[0];
+		    		var y=arr[1];
+		    		point = new BMap.Point(x,y); 
+		    		// console.log(point);
+    			};
+    			if(key=='baidu_mapdescription'){
+	    			description=shebei[i][key]; 
+	    			// console.log(description);
+    			};
+    		}
+
+		    addMarker(point,description);
+		}
+
+		//定位当前所在位置
+		function myFun(result){
+			var cityName = result.name;
+			map.setCenter(cityName);
+			alert("当前定位城市:"+cityName);
+		}
+		var myCity = new BMap.LocalCity();
+		myCity.get(myFun);
+    			
+    	//添加标注的路线规划(弹出框的绑定事件)
+    	
+        
+    </script>
+    <!-- end -->
+
+</body>
+</html>

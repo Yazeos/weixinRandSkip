@@ -1,0 +1,12 @@
+<?php
+
+namespace {%namespace%};
+
+use think\Request;
+
+class {%className%}
+{
+    public function __construct(){
+
+    }
+}
